@@ -206,3 +206,54 @@
     (else (deep-reverse-h (cdr l)
                           (cons (deep-reverse-h (car l) nil)
                                 ans)))))
+
+;exercise 2.28
+(define (fringe l)
+  (cond
+    ((equal? l '()) '())
+    ((not (pair? (car l)))
+         (append (list (car l))
+                 (fringe (cdr l))))
+    (else (append (fringe (car l))
+            (fringe (cdr l))))))
+
+;exercise 2.30
+;square tree without map
+(define (square-tree1 l)
+  (cond
+    ((null? l) nil)
+    ((not (pair? l)) (* l l))
+    (else (cons (square-tree1 (car l))
+                (square-tree1 (cdr l))))))
+
+;square tree with map
+(define (square-tree l)
+  (map (lambda (sub-tree)
+         (if (not (pair? sub-tree))
+             (* sub-tree sub-tree)
+             (square-tree sub-tree)))
+       l))
+
+;exercise 2.31
+;abstract square-tree to produce treemap
+(define (square x) (* x x))
+(define (square-tree-ab l) (tree-map square l))
+
+(define (tree-map f t)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (tree-map f sub-tree)
+             (f sub-tree))) t))
+
+;exercise 2.32
+(define (subsets s)
+  (if (null? s)
+      (list nil)
+      (let ((rest (subsets (cdr s))))
+        (append rest (map
+                      (lambda (sub-set)
+                        (cons (car s) sub-set))
+                            rest)))))
+
+
+
